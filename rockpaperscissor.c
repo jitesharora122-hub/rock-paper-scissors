@@ -46,11 +46,8 @@ void saveScore(const Score *s) {
 void addHistory(int user, int comp, const char *result) {
     FILE *f = fopen(HISTORY_FILE, "a");  /* append mode */
     if (f == NULL) return;
-    char tm[32];
-    time_t now = time(NULL);
-    strftime(tm, sizeof(tm), "%d-%m-%Y %H:%M", localtime(&now));
-    fprintf(f, "%s | You: %s | Computer: %s | %s\n",
-            tm, choiceName(user), choiceName(comp), result);
+    fprintf(f, "You: %s | Computer: %s | %s\n",
+            choiceName(user), choiceName(comp), result);
     fclose(f);
 }
 
