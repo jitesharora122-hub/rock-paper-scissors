@@ -1,10 +1,3 @@
-/*
- * Rock Paper Scissors (Console Game in C)
- *
- * File handling:
- *   scores.txt  -> total wins, losses and draws (saved between runs)
- *   history.txt -> record of every round played
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,9 +7,7 @@
 #define HISTORY_FILE "history.txt"
 
 typedef struct {
-    int wins;
-    int losses;
-    int draws;
+    int wins,losses,draws;
 } Score;
 
 const char *choiceName(int c) {
@@ -25,11 +16,10 @@ const char *choiceName(int c) {
     return "Scissors";
 }
 
-/* ---------- File handling ---------- */
 void loadScore(Score *s) {
     FILE *f = fopen(SCORE_FILE, "r");
     s->wins = s->losses = s->draws = 0;
-    if (f == NULL) return;               /* first run: no file yet */
+    if (f == NULL) return;              
     fscanf(f, "%d %d %d", &s->wins, &s->losses, &s->draws);
     fclose(f);
 }
@@ -76,12 +66,10 @@ void resetData(Score *s) {
     printf("\nAll saved data has been deleted.\n");
 }
 
-/* ---------- Game logic ---------- */
 int getComputerChoice(void) {
-    return rand() % 3 + 1;               /* 1=Rock, 2=Paper, 3=Scissors */
+    return rand() % 3 + 1;               
 }
 
-/* returns 1 if user wins, -1 if computer wins, 0 for draw */
 int decideWinner(int user, int comp) {
     if (user == comp) return 0;
     if ((user == 1 && comp == 3) ||
@@ -102,7 +90,7 @@ void playRound(Score *s) {
 
     printf("\n1. Rock\n2. Paper\n3. Scissors\nEnter your choice: ");
     if (scanf("%d", &user) != 1) {
-        while (getchar() != '\n');       /* clear bad input */
+        while (getchar() != '\n');       
         printf("Invalid input! Enter a number.\n");
         return;
     }
@@ -130,16 +118,14 @@ void playRound(Score *s) {
         s->draws++;
         addHistory(user, comp, "Draw");
     }
-    saveScore(s);                        /* save after every round */
-}
+    saveScore(s);                       
 
 int main(void) {
     Score score;
     int option;
 
     srand((unsigned)time(NULL));
-    loadScore(&score);                   /* restore old data */
-
+    loadScore(&score);                   
     printf("=== ROCK PAPER SCISSORS ===\n");
     printf("Saved score loaded -> Wins: %d | Losses: %d | Draws: %d\n",
            score.wins, score.losses, score.draws);
